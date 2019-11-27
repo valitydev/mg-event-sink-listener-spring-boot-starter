@@ -1,0 +1,9 @@
+---
+time.config:
+  redirectTimeout: 600
+  maxTimePolling: 600
+  pollingDelay: 10
+---
+error-mapping:
+  file: classpath:fixture/errors.json
+  patternReason: "'%s' - '%s'" # 'code' - 'description'
