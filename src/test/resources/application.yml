@@ -18,6 +18,8 @@ info:
   version: 0.0.1
   stage: dev
 
-kafka.topic.event.sink:
-  initial: event_sink
-  aggregated: aggregated_event_sink
+kafka:
+  topic.event.sink:
+    initial: event_sink
+    aggregated: aggregated_event_sink
+  consumer.prefix: test

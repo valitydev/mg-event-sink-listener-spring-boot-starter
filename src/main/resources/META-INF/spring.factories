@@ -1,3 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.rbkmoney.mg.event.sink.converter.BinaryConverterImpl,\
-com.rbkmoney.mg.event.sink.converter.SinkEventToEventPayloadConverter,\
+com.rbkmoney.mg.event.sink.service.ConsumerGroupIdService,\
+com.rbkmoney.mg.event.sink.converter.SinkEventToEventPayloadConverter
