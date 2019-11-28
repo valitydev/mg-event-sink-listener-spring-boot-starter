@@ -77,3 +77,4 @@ fabric.properties
 hs_err_pid*
 env.list
 /src/test/resources/tmp/
+/tmp/

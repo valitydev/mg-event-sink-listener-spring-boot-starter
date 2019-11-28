@@ -8,9 +8,9 @@ import com.rbkmoney.machinegun.eventsink.SinkEvent;
 import com.rbkmoney.mg.event.sink.EventSinkAggregationStreamFactoryImpl;
 import com.rbkmoney.mg.event.sink.MgEventSinkRowMapper;
 import com.rbkmoney.mg.event.sink.converter.BinaryConverterImpl;
-import com.rbkmoney.mg.event.sink.handler.EventHandler;
-import com.rbkmoney.mg.event.sink.handler.MgEventSinkHandler;
-import com.rbkmoney.mg.event.sink.handler.SourceEventParser;
+import com.rbkmoney.mg.event.sink.handler.flow.EventHandler;
+import com.rbkmoney.mg.event.sink.handler.MgEventSinkHandlerExecutor;
+import com.rbkmoney.mg.event.sink.converter.SinkEventToEventPayloadConverter;
 import com.rbkmoney.mg.event.sink.serde.SinkEventSerde;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.Consumer;
@@ -43,7 +43,7 @@ public class EventSinkListenerTest extends KafkaAbstractTest {
 
     private static final String DIR_PATH = "tmp/state-store/";
     public static final String RESULT = "<InvoiceChange invoice_created:InvoiceCreated(invoice:Invoice(id:sourceID, owner_id:owner_id, shop_id:SHOP_ID, created_at:2016-08-10T16:07:18Z, status:<InvoiceStatus unpaid:InvoiceUnpaid()>, details:InvoiceDetails(product:product), due:2016-08-10T16:07:23Z, cost:Cash(amount:12, currency:CurrencyRef(symbolic_code:RUB)), context:Content(type:contentType, data:74 65 73 74)))><InvoiceChange invoice_payment_change:InvoicePaymentChange(id:1, payload:<InvoicePaymentChangePayload invoice_payment_started:InvoicePaymentStarted(payment:InvoicePayment(id:1, created_at:2016-08-10T16:07:18Z, domain_revision:0, status:<InvoicePaymentStatus processed:InvoicePaymentProcessed()>, payer:<Payer payment_resource:PaymentResourcePayer(resource:DisposablePaymentResource(payment_tool:<PaymentTool bank_card:BankCard(token:477bba133c182267fe5f086924abdc5db71f77bfc27f01f2843f2cdc69d89f05, payment_system:mastercard, bin:666, masked_pan:4242, issuer_country:RUS)>, client_info:ClientInfo(ip_address:123.123.123.123, fingerprint:finger)), contact_info:ContactInfo(email:test@mail.ru))>, cost:Cash(amount:123, currency:CurrencyRef(symbolic_code:RUB)), flow:<InvoicePaymentFlow hold:InvoicePaymentFlowHold(on_hold_expiration:capture, held_until:werwer)>))>)>\n";
-    private SourceEventParser eventParser = new SourceEventParser(new BinaryConverterImpl());
+    private SinkEventToEventPayloadConverter eventParser = new SinkEventToEventPayloadConverter(new BinaryConverterImpl());
 
     private List<EventHandler<String>> eventHandlers = new ArrayList<>();
 
@@ -66,7 +66,7 @@ public class EventSinkListenerTest extends KafkaAbstractTest {
                 (key, value, aggregate) -> {
                     System.out.println(aggregate);
                     return aggregate + value;
-                }, new MgEventSinkRowMapper<>(new MgEventSinkHandler<>(eventParser, eventHandlers)),
+                }, new MgEventSinkRowMapper<>(new MgEventSinkHandlerExecutor<>(eventParser, eventHandlers)),
                 r -> RESULT.equals(r))
                 .create(eventSinkStreamProperties());
 

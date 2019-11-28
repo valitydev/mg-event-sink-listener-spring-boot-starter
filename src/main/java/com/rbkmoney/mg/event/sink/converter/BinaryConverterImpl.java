@@ -6,12 +6,13 @@ import org.apache.thrift.TDeserializer;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 @Slf4j
-@Component
+@Service
 public class BinaryConverterImpl implements BinaryConverter<EventPayload> {
 
-    ThreadLocal<TDeserializer> tDeserializerThreadLocal = ThreadLocal.withInitial(() -> new TDeserializer(new TBinaryProtocol.Factory()));
+    private ThreadLocal<TDeserializer> tDeserializerThreadLocal = ThreadLocal.withInitial(() -> new TDeserializer(new TBinaryProtocol.Factory()));
 
     @Override
     public EventPayload convert(byte[] bin, Class<EventPayload> clazz) {

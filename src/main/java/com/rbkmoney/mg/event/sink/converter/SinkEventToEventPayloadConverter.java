@@ -1,4 +1,4 @@
-package com.rbkmoney.mg.event.sink.handler;
+package com.rbkmoney.mg.event.sink.converter;
 
 import com.rbkmoney.damsel.payment_processing.EventPayload;
 import com.rbkmoney.machinegun.eventsink.SinkEvent;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SourceEventParser {
+public class SinkEventToEventPayloadConverter {
 
     private final BinaryConverter<EventPayload> converter;
 

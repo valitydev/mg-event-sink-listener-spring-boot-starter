@@ -3,18 +3,19 @@ package com.rbkmoney.mg.event.sink.handler;
 import com.rbkmoney.damsel.payment_processing.EventPayload;
 import com.rbkmoney.damsel.payment_processing.InvoiceChange;
 import com.rbkmoney.machinegun.eventsink.SinkEvent;
+import com.rbkmoney.mg.event.sink.converter.SinkEventToEventPayloadConverter;
+import com.rbkmoney.mg.event.sink.handler.flow.EventHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-public class MgEventSinkHandler<T> {
+public class MgEventSinkHandlerExecutor<T> {
 
-    private final SourceEventParser eventParser;
+    private final SinkEventToEventPayloadConverter eventParser;
     private final List<EventHandler<T>> eventHandlers;
 
     public List<T> handle(SinkEvent sinkEvent) {
