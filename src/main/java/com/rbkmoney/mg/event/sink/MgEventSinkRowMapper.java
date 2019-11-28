@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 @RequiredArgsConstructor
 public class MgEventSinkRowMapper<T> implements KeyValueMapper<String, SinkEvent, KeyValue<String, List<T>>> {
 
