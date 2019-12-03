@@ -165,6 +165,23 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <distributionManagement>
+        <downloadUrl>http://java-nexus.msk1.rbkmoney.net:8081/nexus/content/groups/public</downloadUrl>
+        <repository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>releases</id>
+            <name>RBKmoney releases repository</name>
+            <url>http://java-nexus.msk1.rbkmoney.net:8081/nexus/content/repositories/releases</url>
+            <layout>default</layout>
+        </repository>
+        <snapshotRepository>
+            <uniqueVersion>true</uniqueVersion>
+            <id>snapshots</id>
+            <name>RBKmoney snapshots repository</name>
+            <url>http://java-nexus.msk1.rbkmoney.net:8081/nexus/content/repositories/snapshots</url>
+            <layout>default</layout>
+        </snapshotRepository>
+    </distributionManagement>
 
     <dependencyManagement>
         <dependencies>
