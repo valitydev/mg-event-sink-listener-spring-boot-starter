@@ -8,6 +8,6 @@ build('mg-event-sink-listener-spring-boot-starter', 'docker-host') {
         javaLibPipeline = load("build_utils/jenkins_lib/pipeJavaLib.groovy")
     }
 
-    def buildImageTag = "bdc05544014b3475c8e0726d3b3d6fc81b09db96"
+    def buildImageTag = "a72d939ee965b89432cd5b502b3a369aad74093f"
     javaLibPipeline(buildImageTag)
 }
