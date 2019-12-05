@@ -8,9 +8,9 @@ import com.rbkmoney.machinegun.eventsink.SinkEvent;
 import com.rbkmoney.mg.event.sink.EventSinkAggregationStreamFactoryImpl;
 import com.rbkmoney.mg.event.sink.MgEventSinkRowMapper;
 import com.rbkmoney.mg.event.sink.converter.BinaryConverterImpl;
-import com.rbkmoney.mg.event.sink.handler.flow.EventHandler;
-import com.rbkmoney.mg.event.sink.handler.MgEventSinkHandlerExecutor;
 import com.rbkmoney.mg.event.sink.converter.SinkEventToEventPayloadConverter;
+import com.rbkmoney.mg.event.sink.handler.MgEventSinkHandlerExecutor;
+import com.rbkmoney.mg.event.sink.handler.flow.EventHandler;
 import com.rbkmoney.mg.event.sink.serde.SinkEventSerde;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.Consumer;
@@ -67,7 +67,8 @@ public class EventSinkListenerTest extends KafkaAbstractTest {
                     System.out.println(aggregate);
                     return aggregate + value;
                 }, new MgEventSinkRowMapper<>(new MgEventSinkHandlerExecutor<>(eventParser, eventHandlers)),
-                r -> RESULT.equals(r))
+                r -> RESULT.equals(r),
+                (key, value) -> key)
                 .create(eventSinkStreamProperties());
 
         Thread.sleep(4_000l);
@@ -103,7 +104,7 @@ public class EventSinkListenerTest extends KafkaAbstractTest {
 
     @AfterClass
     public static void clean() {
-        File dir = new File("tmp/state-store/event-sink-fraud/1_0/rocksdb/KSTREAM-AGGREGATE-STATE-STORE-0000000004");
+        File dir = new File("tmp/state-store/event-sink-fraud/1_0/rocksdb/KSTREAM-AGGREGATE-STATE-STORE-0000000005");
         for (File file : dir.listFiles()) {
             file.delete();
         }

@@ -30,6 +30,7 @@ public class EventSinkAggregationStreamFactoryImpl<K, T, R> implements EventStre
     private final Aggregator<K, T, R> aggregator;
     private final KeyValueMapper<String, SinkEvent, KeyValue<K, List<T>>> keyValueMapper;
     private final Predicate<R> filter;
+    private final KeyValueMapper<K, T, K> selector;
 
     @Override
     public KafkaStreams create(final Properties streamsConfiguration) {
@@ -41,7 +42,7 @@ public class EventSinkAggregationStreamFactoryImpl<K, T, R> implements EventStre
                     .peek((key, value) -> log.debug("Aggregate key={} value={}", key, value))
                     .map(keyValueMapper)
                     .flatMapValues(value -> value)
-                    .groupByKey()
+                    .groupBy(selector)
                     .aggregate(initializer, aggregator, Materialized.with(kSerde, resultSerde))
                     .toStream()
                     .filter((key, value) -> filter.test(value))
