@@ -34,6 +34,7 @@ public class EventSinkAggregationStreamFactoryImpl<K, T, R> implements EventStre
 
     @Override
     public KafkaStreams create(final Properties streamsConfiguration) {
+        KafkaStreams kafkaStreams = null;
         try {
             log.info("Create stream aggregation!");
 
@@ -49,11 +50,11 @@ public class EventSinkAggregationStreamFactoryImpl<K, T, R> implements EventStre
                     .peek((key, value) -> log.debug("Filtered key={} value={}", key, value))
                     .to(aggregatedSinkTopic, Produced.with(kSerde, resultSerde));
 
-            KafkaStreams kafkaStreams = new KafkaStreams(builder.build(), streamsConfiguration);
+            kafkaStreams = new KafkaStreams(builder.build(), streamsConfiguration);
 
             kafkaStreams.setUncaughtExceptionHandler((t, e) -> {
                 log.error("Caught unhandled Kafka Streams Exception:", e);
-                kafkaStreams.close();
+                throw new StreamInitializationException(e);
             });
 
             kafkaStreams.start();
@@ -61,6 +62,9 @@ public class EventSinkAggregationStreamFactoryImpl<K, T, R> implements EventStre
             return kafkaStreams;
         } catch (Exception e) {
             log.error("Error when EventSinkAggregationStreamFactoryImpl insert e: ", e);
+            if (kafkaStreams != null) {
+                kafkaStreams.close();
+            }
             throw new StreamInitializationException(e);
         }
     }
