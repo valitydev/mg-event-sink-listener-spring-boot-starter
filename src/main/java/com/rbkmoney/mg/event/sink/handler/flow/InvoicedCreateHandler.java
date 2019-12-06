@@ -7,7 +7,7 @@ import com.rbkmoney.geck.filter.rule.PathConditionRule;
 import lombok.Getter;
 import org.apache.thrift.TBase;
 
-public abstract class InvoiceCreateHandler<R> implements EventHandler<R> {
+public abstract class InvoicedCreateHandler<R> implements EventHandler<R> {
 
     @Getter
     private Filter<TBase> filter = new PathConditionFilter(

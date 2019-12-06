@@ -1,7 +1,7 @@
 package com.rbkmoney;
 
 import com.rbkmoney.app.TestApplication;
-import com.rbkmoney.handlers.InvoiceCreateHandlerTestImpl;
+import com.rbkmoney.handlers.InvoicedCreateHandlerTestImpl;
 import com.rbkmoney.handlers.InvoicePaymentStartedHandlerTestImpl;
 import com.rbkmoney.handlers.InvoicePaymentStatusChangedHandlerTestImpl;
 import com.rbkmoney.machinegun.eventsink.SinkEvent;
@@ -49,7 +49,7 @@ public class EventSinkListenerTest extends KafkaAbstractTest {
 
     @Before
     public void init() {
-        eventHandlers.add(new InvoiceCreateHandlerTestImpl());
+        eventHandlers.add(new InvoicedCreateHandlerTestImpl());
         eventHandlers.add(new InvoicePaymentStartedHandlerTestImpl());
         eventHandlers.add(new InvoicePaymentStatusChangedHandlerTestImpl());
     }
