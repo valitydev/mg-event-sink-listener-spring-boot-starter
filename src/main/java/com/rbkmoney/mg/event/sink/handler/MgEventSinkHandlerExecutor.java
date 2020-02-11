@@ -7,10 +7,12 @@ import com.rbkmoney.mg.event.sink.converter.SinkEventToEventPayloadConverter;
 import com.rbkmoney.mg.event.sink.handler.flow.EventHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -30,7 +32,9 @@ public class MgEventSinkHandlerExecutor<T> {
                         .ifPresent(tEventHandler -> list.add(tEventHandler.handle(change, sinkEvent)));
             }
         }
-        return list;
+        return list.stream()
+                .filter(Objects::nonNull)
+                .collect(toList());
     }
 
 }
