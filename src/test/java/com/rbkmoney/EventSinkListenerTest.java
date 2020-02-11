@@ -60,7 +60,7 @@ public class EventSinkListenerTest extends KafkaAbstractTest {
         List<SinkEvent> sinkEvents = MgEventSinkFlowGenerator.generateSuccessFlow("sourceID");
         sinkEvents.forEach(this::produceMessageToEventSink);
 
-        KafkaStreams kafkaStreams = new EventSinkAggregationStreamFactoryImpl<>(EVENT_SINK, AGGREGATED_EVENT_SINK, new SinkEventSerde(),
+        KafkaStreams kafkaStreams = new EventSinkAggregationStreamFactoryImpl<>(EVENT_SINK, AGGREGATED_EVENT_SINK, true, new SinkEventSerde(),
                 Serdes.String(), Serdes.String(),
                 () -> "",
                 (key, value, aggregate) -> {
