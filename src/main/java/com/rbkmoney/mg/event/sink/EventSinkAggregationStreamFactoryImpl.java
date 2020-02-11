@@ -23,6 +23,8 @@ public class EventSinkAggregationStreamFactoryImpl<K, T, R> implements EventStre
     private final String initialEventSink;
     private final String aggregatedSinkTopic;
 
+    private final boolean cleanInstall;
+
     private final SinkEventSerde sinkEventSerde;
     private final Serde<K> kSerde;
     private final Serde<R> resultSerde;
@@ -56,6 +58,10 @@ public class EventSinkAggregationStreamFactoryImpl<K, T, R> implements EventStre
                 log.error("Caught unhandled Kafka Streams Exception:", e);
                 throw new StreamInitializationException(e);
             });
+
+            if (cleanInstall) {
+                kafkaStreams.cleanUp();
+            }
 
             kafkaStreams.start();
             log.info("Stream aggregation is started!");
