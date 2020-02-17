@@ -40,7 +40,7 @@ public class EventSinkAggregationStreamFactoryImpl<K, T, R> implements EventStre
 
             StreamsBuilder builder = new StreamsBuilder();
             builder.stream(customProperties.getInitialEventSink(), Consumed.with(Serdes.String(), sinkEventSerde))
-                    .peek((key, value) -> sleepIfThrottl())
+                    .peek((key, value) -> sleepIfThrottle())
                     .peek((key, value) -> log.debug("Aggregate key={} value={}", key, value))
                     .map(keyValueMapper)
                     .flatMapValues(value -> value)
@@ -74,7 +74,7 @@ public class EventSinkAggregationStreamFactoryImpl<K, T, R> implements EventStre
         }
     }
 
-    private void sleepIfThrottl() {
+    private void sleepIfThrottle() {
         if (customProperties.isThrottlingEnabled()) {
             try {
                 Thread.sleep(customProperties.getThrottlingTimeoutMs());
