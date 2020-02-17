@@ -1,18 +1,21 @@
 package com.rbkmoney.mg.event.sink.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class CustomProperties {
 
-    private final boolean cleanInstall;
-    private final boolean throttlingEnabled;
+    private boolean cleanInstall;
+    private boolean throttlingEnabled;
 
     //max.poll.records * throttlingTimeoutMs should always be less session.timeout
-    private final int throttlingTimeoutMs;
+    private int throttlingTimeoutMs;
 
-    private final String initialEventSink;
-    private final String aggregatedSinkTopic;
+    private String initialEventSink;
+    private String aggregatedSinkTopic;
+
 }
