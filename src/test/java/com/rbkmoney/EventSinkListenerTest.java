@@ -1,9 +1,9 @@
 package com.rbkmoney;
 
 import com.rbkmoney.app.TestApplication;
-import com.rbkmoney.handlers.InvoicedCreateHandlerTestImpl;
 import com.rbkmoney.handlers.InvoicePaymentStartedHandlerTestImpl;
 import com.rbkmoney.handlers.InvoicePaymentStatusChangedHandlerTestImpl;
+import com.rbkmoney.handlers.InvoicedCreateHandlerTestImpl;
 import com.rbkmoney.machinegun.eventsink.SinkEvent;
 import com.rbkmoney.mg.event.sink.EventSinkAggregationStreamFactoryImpl;
 import com.rbkmoney.mg.event.sink.MgEventSinkRowMapper;
@@ -11,6 +11,7 @@ import com.rbkmoney.mg.event.sink.converter.BinaryConverterImpl;
 import com.rbkmoney.mg.event.sink.converter.SinkEventToEventPayloadConverter;
 import com.rbkmoney.mg.event.sink.handler.MgEventSinkHandlerExecutor;
 import com.rbkmoney.mg.event.sink.handler.flow.EventHandler;
+import com.rbkmoney.mg.event.sink.model.CustomProperties;
 import com.rbkmoney.mg.event.sink.serde.SinkEventSerde;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.Consumer;
@@ -46,12 +47,14 @@ public class EventSinkListenerTest extends KafkaAbstractTest {
     private SinkEventToEventPayloadConverter eventParser = new SinkEventToEventPayloadConverter(new BinaryConverterImpl());
 
     private List<EventHandler<String>> eventHandlers = new ArrayList<>();
-
+    private CustomProperties customProperties;
     @Before
     public void init() {
         eventHandlers.add(new InvoicedCreateHandlerTestImpl());
         eventHandlers.add(new InvoicePaymentStartedHandlerTestImpl());
         eventHandlers.add(new InvoicePaymentStatusChangedHandlerTestImpl());
+
+        customProperties = new CustomProperties(true, true, 10, EVENT_SINK, AGGREGATED_EVENT_SINK);
     }
 
     @Test
@@ -60,7 +63,7 @@ public class EventSinkListenerTest extends KafkaAbstractTest {
         List<SinkEvent> sinkEvents = MgEventSinkFlowGenerator.generateSuccessFlow("sourceID");
         sinkEvents.forEach(this::produceMessageToEventSink);
 
-        KafkaStreams kafkaStreams = new EventSinkAggregationStreamFactoryImpl<>(EVENT_SINK, AGGREGATED_EVENT_SINK, true, new SinkEventSerde(),
+        KafkaStreams kafkaStreams = new EventSinkAggregationStreamFactoryImpl<>(customProperties, new SinkEventSerde(),
                 Serdes.String(), Serdes.String(),
                 () -> "",
                 (key, value, aggregate) -> {
@@ -102,12 +105,4 @@ public class EventSinkListenerTest extends KafkaAbstractTest {
         return props;
     }
 
-    @AfterClass
-    public static void clean() {
-        File dir = new File("tmp/state-store/event-sink-fraud/1_0/rocksdb/KSTREAM-AGGREGATE-STATE-STORE-0000000005");
-        for (File file : dir.listFiles()) {
-            file.delete();
-        }
-        dir.delete();
-    }
 }

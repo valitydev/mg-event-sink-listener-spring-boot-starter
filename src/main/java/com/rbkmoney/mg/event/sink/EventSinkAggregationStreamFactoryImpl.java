@@ -2,6 +2,7 @@ package com.rbkmoney.mg.event.sink;
 
 import com.rbkmoney.machinegun.eventsink.SinkEvent;
 import com.rbkmoney.mg.event.sink.exception.StreamInitializationException;
+import com.rbkmoney.mg.event.sink.model.CustomProperties;
 import com.rbkmoney.mg.event.sink.serde.SinkEventSerde;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +21,7 @@ import java.util.function.Predicate;
 @RequiredArgsConstructor
 public class EventSinkAggregationStreamFactoryImpl<K, T, R> implements EventStreamFactory {
 
-    private final String initialEventSink;
-    private final String aggregatedSinkTopic;
-
-    private final boolean cleanInstall;
+    private final CustomProperties customProperties;
 
     private final SinkEventSerde sinkEventSerde;
     private final Serde<K> kSerde;
@@ -41,7 +39,8 @@ public class EventSinkAggregationStreamFactoryImpl<K, T, R> implements EventStre
             log.info("Create stream aggregation!");
 
             StreamsBuilder builder = new StreamsBuilder();
-            builder.stream(initialEventSink, Consumed.with(Serdes.String(), sinkEventSerde))
+            builder.stream(customProperties.getInitialEventSink(), Consumed.with(Serdes.String(), sinkEventSerde))
+                    .peek((key, value) -> sleepIfThrottl())
                     .peek((key, value) -> log.debug("Aggregate key={} value={}", key, value))
                     .map(keyValueMapper)
                     .flatMapValues(value -> value)
@@ -50,7 +49,7 @@ public class EventSinkAggregationStreamFactoryImpl<K, T, R> implements EventStre
                     .toStream()
                     .filter((key, value) -> filter.test(value))
                     .peek((key, value) -> log.debug("Filtered key={} value={}", key, value))
-                    .to(aggregatedSinkTopic, Produced.with(kSerde, resultSerde));
+                    .to(customProperties.getAggregatedSinkTopic(), Produced.with(kSerde, resultSerde));
 
             kafkaStreams = new KafkaStreams(builder.build(), streamsConfiguration);
 
@@ -59,7 +58,7 @@ public class EventSinkAggregationStreamFactoryImpl<K, T, R> implements EventStre
                 throw new StreamInitializationException(e);
             });
 
-            if (cleanInstall) {
+            if (customProperties.isCleanInstall()) {
                 kafkaStreams.cleanUp();
             }
 
@@ -72,6 +71,17 @@ public class EventSinkAggregationStreamFactoryImpl<K, T, R> implements EventStre
                 kafkaStreams.close();
             }
             throw new StreamInitializationException(e);
+        }
+    }
+
+    private void sleepIfThrottl() {
+        if (customProperties.isThrottlingEnabled()) {
+            try {
+                Thread.sleep(customProperties.getThrottlingTimeoutMs());
+            } catch (InterruptedException e) {
+                log.error("Exception when throttl e: ", e);
+                Thread.currentThread().interrupt();
+            }
         }
     }
 
