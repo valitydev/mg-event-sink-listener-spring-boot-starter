@@ -79,7 +79,7 @@ public class EventSinkAggregationStreamFactoryImpl<K, T, R> implements EventStre
             try {
                 Thread.sleep(customProperties.getThrottlingTimeoutMs());
             } catch (InterruptedException e) {
-                log.error("Exception when throttl e: ", e);
+                log.error("Exception when throttle e: ", e);
                 Thread.currentThread().interrupt();
             }
         }
