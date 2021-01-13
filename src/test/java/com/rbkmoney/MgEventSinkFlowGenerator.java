@@ -162,7 +162,7 @@ public class MgEventSinkFlowGenerator {
                         .setToken("477bba133c182267fe5f086924abdc5db71f77bfc27f01f2843f2cdc69d89f05")
                         .setPaymentSystem(BankCardPaymentSystem.mastercard)
                         .setBin(BIN)
-                        .setMaskedPan("4242")
+                        .setLastDigits("3333")
                         .setIssuerCountry(Residence.RUS)
         );
         return paymentTool;

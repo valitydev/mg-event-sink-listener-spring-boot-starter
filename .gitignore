@@ -77,4 +77,5 @@ fabric.properties
 hs_err_pid*
 env.list
 /src/test/resources/tmp/
+/src/test/java/com/.DS_Store
 /tmp/
