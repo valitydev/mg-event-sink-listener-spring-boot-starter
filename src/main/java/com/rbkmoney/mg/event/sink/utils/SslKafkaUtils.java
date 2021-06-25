@@ -12,8 +12,9 @@ public class SslKafkaUtils {
     private static final String PKCS_12 = "PKCS12";
     private static final String SSL = "SSL";
 
-    public static Map<String, Object> sslConfigure(Boolean kafkaSslEnable, String serverStoreCertPath, String serverStorePassword,
-                                                   String clientStoreCertPath, String keyStorePassword, String keyPassword) {
+    public static Map<String, Object> sslConfigure(
+            Boolean kafkaSslEnable, String serverStoreCertPath, String serverStorePassword,
+            String clientStoreCertPath, String keyStorePassword, String keyPassword) {
         Map<String, Object> configProps = new HashMap<>();
         if (kafkaSslEnable) {
             configProps.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, SSL);

@@ -17,7 +17,11 @@ public class NotImplementedException extends RuntimeException {
         super(cause);
     }
 
-    public NotImplementedException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public NotImplementedException(
+            String message,
+            Throwable cause,
+            boolean enableSuppression,
+            boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

@@ -14,8 +14,10 @@ public abstract class InvoicePaymentRefundStatusChangedHandler<T> implements Eve
     @Getter
     private final Filter<TBase> filter = new PathConditionFilter(
             new PathConditionRule(
-                    "invoice_payment_change.payload.invoice_payment_refund_change.payload.invoice_payment_refund_status_changed",
-                    new IsNullCondition().not())
+                    "invoice_payment_change.payload.invoice_payment_refund_change.payload" +
+                    ".invoice_payment_refund_status_changed",
+                    new IsNullCondition().not()
+            )
     );
 
 }

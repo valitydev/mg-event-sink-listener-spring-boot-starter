@@ -29,7 +29,7 @@ public class MgEventSinkHandlerExecutor<T> {
                 eventHandlers.stream()
                         .filter(invoiceChangeHandler -> invoiceChangeHandler.filter(change))
                         .findFirst()
-                        .ifPresent(tEventHandler -> list.add(tEventHandler.handle(change, sinkEvent)));
+                        .ifPresent(eventHandler -> list.add(eventHandler.handle(change, sinkEvent)));
             }
         }
         return list.stream()
