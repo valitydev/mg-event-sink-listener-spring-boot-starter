@@ -2,7 +2,6 @@ package com.rbkmoney.mg.event.sink.converter;
 
 import com.rbkmoney.damsel.payment_processing.EventPayload;
 import com.rbkmoney.machinegun.eventsink.SinkEvent;
-import com.rbkmoney.mg.event.sink.converter.BinaryConverter;
 import com.rbkmoney.mg.event.sink.exception.ParseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -144,7 +144,8 @@ public class MgEventSinkFlowGenerator {
     }
 
     private static Payer createCustomerPayer() {
-        Payer customer = Payer.customer(new CustomerPayer("custId", "1", "rec_paym_tool", createBankCard(), new ContactInfo()));
+        Payer customer =
+                Payer.customer(new CustomerPayer("custId", "1", "rec_paym_tool", createBankCard(), new ContactInfo()));
         customer.setPaymentResource(
                 new PaymentResourcePayer()
                         .setResource(new DisposablePaymentResource()

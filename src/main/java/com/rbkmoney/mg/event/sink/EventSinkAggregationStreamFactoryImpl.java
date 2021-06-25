@@ -24,7 +24,7 @@ public class EventSinkAggregationStreamFactoryImpl<K, T, R> implements EventStre
     private final CustomProperties customProperties;
 
     private final SinkEventSerde sinkEventSerde;
-    private final Serde<K> kSerde;
+    private final Serde<K> kafkaSerde;
     private final Serde<R> resultSerde;
     private final Initializer<R> initializer;
     private final Aggregator<K, T, R> aggregator;
@@ -45,11 +45,11 @@ public class EventSinkAggregationStreamFactoryImpl<K, T, R> implements EventStre
                     .map(keyValueMapper)
                     .flatMapValues(value -> value)
                     .groupBy(selector)
-                    .aggregate(initializer, aggregator, Materialized.with(kSerde, resultSerde))
+                    .aggregate(initializer, aggregator, Materialized.with(kafkaSerde, resultSerde))
                     .toStream()
                     .filter((key, value) -> filter.test(value))
                     .peek((key, value) -> log.debug("Filtered key={} value={}", key, value))
-                    .to(customProperties.getAggregatedSinkTopic(), Produced.with(kSerde, resultSerde));
+                    .to(customProperties.getAggregatedSinkTopic(), Produced.with(kafkaSerde, resultSerde));
 
             kafkaStreams = new KafkaStreams(builder.build(), streamsConfiguration);
 

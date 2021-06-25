@@ -29,11 +29,10 @@ import java.util.Properties;
 @ContextConfiguration(initializers = KafkaAbstractTest.Initializer.class)
 public abstract class KafkaAbstractTest {
 
-    private static final String CONFLUENT_PLATFORM_VERSION = "5.0.1";
-    private static final String AGGR = "aggr";
     public static final String EVENT_SINK = "event_sink";
     public static final String AGGREGATED_EVENT_SINK = "aggregated_event_sink";
-
+    private static final String CONFLUENT_PLATFORM_VERSION = "5.0.1";
+    private static final String AGGR = "aggr";
     @ClassRule
     public static KafkaContainer kafka = new KafkaContainer(CONFLUENT_PLATFORM_VERSION).withEmbeddedZookeeper();
 
@@ -49,6 +48,28 @@ public abstract class KafkaAbstractTest {
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, ThriftSerializer.class.getName());
         return new KafkaProducer<>(props);
+    }
+
+    static <T> Consumer<String, T> createConsumer(Class clazz) {
+        Properties props = new Properties();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers());
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, clazz);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "test");
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        return new KafkaConsumer<>(props);
+    }
+
+    void produceMessageToEventSink(SinkEvent sinkEvent) {
+        try (Producer<String, SinkEvent> producer = createProducerAggr()) {
+            ProducerRecord<String, SinkEvent> producerRecord = new ProducerRecord<>(eventSinkTopic,
+                    sinkEvent.getEvent().getSourceId(), sinkEvent
+            );
+            producer.send(producerRecord).get();
+            log.info("produceMessageToEventSink() sinkEvent: {}", sinkEvent);
+        } catch (Exception e) {
+            log.error("Error when produceMessageToEventSink e:", e);
+        }
     }
 
     public static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
@@ -73,27 +94,6 @@ public abstract class KafkaAbstractTest {
             }
             consumer.close();
             return consumer;
-        }
-    }
-
-    static <T> Consumer<String, T> createConsumer(Class clazz) {
-        Properties props = new Properties();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.getBootstrapServers());
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, clazz);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "test");
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        return new KafkaConsumer<>(props);
-    }
-
-    void produceMessageToEventSink(SinkEvent sinkEvent) {
-        try (Producer<String, SinkEvent> producer = createProducerAggr()) {
-            ProducerRecord<String, SinkEvent> producerRecord = new ProducerRecord<>(eventSinkTopic,
-                    sinkEvent.getEvent().getSourceId(), sinkEvent);
-            producer.send(producerRecord).get();
-            log.info("produceMessageToEventSink() sinkEvent: {}", sinkEvent);
-        } catch (Exception e) {
-            log.error("Error when produceMessageToEventSink e:", e);
         }
     }
 }

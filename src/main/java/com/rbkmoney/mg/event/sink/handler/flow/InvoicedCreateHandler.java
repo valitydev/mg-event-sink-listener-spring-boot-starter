@@ -11,8 +11,10 @@ public abstract class InvoicedCreateHandler<R> implements EventHandler<R> {
 
     @Getter
     private Filter<TBase> filter = new PathConditionFilter(
-            new PathConditionRule("invoice_created",
-                    new IsNullCondition().not())
+            new PathConditionRule(
+                    "invoice_created",
+                    new IsNullCondition().not()
+            )
     );
 
 }

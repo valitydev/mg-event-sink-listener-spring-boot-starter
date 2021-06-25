@@ -13,7 +13,8 @@ public abstract class InvoicePaymentStatusChangedHandler<T> implements EventHand
     private final Filter<TBase> filter = new PathConditionFilter(
             new PathConditionRule(
                     "invoice_payment_change.payload.invoice_payment_status_changed",
-                    new IsNullCondition().not())
+                    new IsNullCondition().not()
+            )
     );
 
 }

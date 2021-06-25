@@ -5,7 +5,6 @@ import com.rbkmoney.mg.event.sink.handler.MgEventSinkHandlerExecutor;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.KeyValueMapper;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
