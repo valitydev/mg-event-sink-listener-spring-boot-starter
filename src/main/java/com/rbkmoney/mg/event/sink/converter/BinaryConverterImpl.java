@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class BinaryConverterImpl implements BinaryConverter<EventPayload> {
 
-    private ThreadLocal<TDeserializer> thriftDeserializerThreadLocal =
+    private final ThreadLocal<TDeserializer> thriftDeserializerThreadLocal = //NOSONAR we don't reset this value
             ThreadLocal.withInitial(() -> new TDeserializer(new TBinaryProtocol.Factory()));
 
     @Override
