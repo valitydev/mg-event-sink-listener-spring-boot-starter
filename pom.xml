@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.rbkmoney</groupId>
+        <groupId>dev.vality</groupId>
         <artifactId>library-parent-pom</artifactId>
-        <version>1.0.8</version>
+        <version>1.0.2</version>
     </parent>
 
     <artifactId>mg-event-sink-listener-spring-boot-starter</artifactId>
@@ -18,15 +18,15 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>8</java.version>
+        <java.version>15</java.version>
         <dockerfile.registry>${env.REGISTRY}</dockerfile.registry>
-        <machinegun-proto.version>1.12-ebae56f</machinegun-proto.version>
-        <woody.thrift.version>[1.1.21,)</woody.thrift.version>
-        <shared.resources.version>0.3.8</shared.resources.version>
-        <damsel.version>1.466-060478e</damsel.version>
+        <machinegun-proto.version>1.21-e4784ab</machinegun-proto.version>
+        <woody.thrift.version>1.0.4</woody.thrift.version>
+        <shared.resources.version>1.4.0</shared.resources.version>
+        <damsel.version>1.544-dcd92dd</damsel.version>
         <jackson.version>2.12.0</jackson.version>
-        <spring.version>2.5.6</spring.version>
-        <kafka.version>2.8.0</kafka.version>
+        <spring.version>2.6.2</spring.version>
+        <kafka.version>2.8.1</kafka.version>
     </properties>
 
     <dependencies>
@@ -40,7 +40,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.20</version>
+            <version>1.18.22</version>
             <scope>provided</scope>
         </dependency>
 
@@ -99,36 +99,38 @@
             </exclusions>
         </dependency>
 
-        <!--RBK-->
+        <!--Vality-->
         <dependency>
-            <groupId>com.rbkmoney.geck</groupId>
+            <groupId>dev.vality.geck</groupId>
             <artifactId>serializer</artifactId>
-            <version>0.6.11</version>
+            <version>0.0.1</version>
         </dependency>
         <dependency>
-            <groupId>com.rbkmoney</groupId>
+            <groupId>dev.vality</groupId>
             <artifactId>damsel</artifactId>
             <version>${damsel.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.rbkmoney.woody</groupId>
+            <groupId>dev.vality.woody</groupId>
             <artifactId>woody-thrift</artifactId>
             <version>${woody.thrift.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.rbkmoney</groupId>
-            <artifactId>kafka-common-lib</artifactId>
-            <version>0.1.8</version>
-        </dependency>
-        <dependency>
-            <groupId>com.rbkmoney</groupId>
+            <groupId>dev.vality</groupId>
             <artifactId>machinegun-proto</artifactId>
             <version>${machinegun-proto.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.rbkmoney.geck</groupId>
+            <groupId>dev.vality.geck</groupId>
             <artifactId>filter</artifactId>
-            <version>0.6.11</version>
+            <version>0.0.1</version>
+        </dependency>
+
+        <!-- RBK -->
+        <dependency>
+            <groupId>com.rbkmoney</groupId>
+            <artifactId>kafka-common-lib</artifactId>
+            <version>0.1.9</version>
         </dependency>
 
         <dependency>
@@ -141,13 +143,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>2.5.0</version>
+            <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>kafka</artifactId>
-            <version>1.15.1</version>
+            <version>1.16.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
