@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>mg-event-sink-listener-spring-boot-starter</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <packaging>jar</packaging>
 
     <description></description>
@@ -21,7 +21,7 @@
         <java.version>15</java.version>
         <dockerfile.registry>${env.REGISTRY}</dockerfile.registry>
         <machinegun-proto.version>1.21-e4784ab</machinegun-proto.version>
-        <woody.thrift.version>1.0.4</woody.thrift.version>
+        <woody.thrift.version>1.0.5</woody.thrift.version>
         <shared.resources.version>1.4.0</shared.resources.version>
         <damsel.version>1.544-dcd92dd</damsel.version>
         <jackson.version>2.12.0</jackson.version>
